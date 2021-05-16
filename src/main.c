@@ -16,6 +16,11 @@ void setupHardware(void);
 
 // Global Variables
 uint32_t core_clock_hz;
+uint32_t SystemCoreClock;
+
+const int led1_delay = 500;
+const int led2_delay = 2000;
+
 
 // FreeRTOS tasks
 
@@ -47,8 +52,8 @@ int main(void) {
   setupHardware();
 
   // Create the LED tasks.
-  xTaskCreate(led1_task, "LED_blink_1", 128, NULL, configMAX_PRIORITIES-1, NULL);
-  xTaskCreate(led2_task, "LED_blink_2", 128, NULL, configMAX_PRIORITIES-1, NULL);
+  xTaskCreate(led1_task, "LED_blink_1", 128, (void*)&led1_delay, configMAX_PRIORITIES-1, NULL);
+  xTaskCreate(led2_task, "LED_blink_2", 128, (void*)&led2_delay, configMAX_PRIORITIES-1, NULL);
   // Start the scheduler.
   vTaskStartScheduler();
 
@@ -80,7 +85,7 @@ void setupHardware(void) {
   // wait for the setting to settle
   while (!(RCC->CFGR & RCC_CFGR_SWS_PLL)) continue;
 
-  core_clock_hz = 72000000UL;
+  SystemCoreClock = core_clock_hz = 72000000UL;
 
 
   // Nucleo Board LED GPIO setup

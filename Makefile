@@ -36,6 +36,10 @@ CFLAGS += -fmessage-length=0
 # (Set system to ignore semihosted junk)
 CFLAGS += --specs=nosys.specs
 
+CFLAGS += -mhard-float
+CFLAGS += -mfloat-abi=hard
+CFLAGS += -mfpu=fpv4-sp-d16
+
 # Linker directives.
 LSCRIPT = ./ld/$(LD_SCRIPT)
 LFLAGS += -mcpu=$(MCU_SPEC)
@@ -46,6 +50,10 @@ LFLAGS += -nostdlib
 LFLAGS += -lgcc
 LFLAGS += -T$(LSCRIPT)
 
+LFLAGS += -mhard-float
+LFLAGS += -mfloat-abi=hard
+LFLAGS += -mfpu=fpv4-sp-d16
+
 AS_SRC   =  ./src/startup_stm32f303retx.s
 C_SRC    =  ./src/main.c
 C_SRC		+=	$(FREERTOS_PORT_C)
@@ -53,7 +61,7 @@ C_SRC   += ./freertos/Source/list.c
 C_SRC   += ./freertos/Source/tasks.c
 C_SRC   += ./freertos/Source/queue.c
 
-INCLUDE  =  -I./
+INCLUDE  =  -I./src
 INCLUDE  += -I./device_headers
 INCLUDE  += -I./freertos/Source/include
 INCLUDE  += -I$(FREERTOS_PORT_I)
