@@ -4,6 +4,10 @@ TARGET = main
 LD_SCRIPT = STM32F303RE.ld
 MCU_SPEC  = cortex-m4
 
+# FreeRTOS Portable
+FREERTOS_PORT_I = ./freertos/Source/portable/GCC/ARM_CM4F
+FREERTOS_PORT_C = $(FREERTOS_PORT_I)/port.c
+
 # Toolchain definitions (ARM bare metal defaults)
 TOOLCHAIN = "D:\Program Files (x86)\GNU Arm Embedded Toolchain\9 2020-q2-update"
 CC = $(TOOLCHAIN)/bin/arm-none-eabi-gcc
@@ -44,9 +48,15 @@ LFLAGS += -T$(LSCRIPT)
 
 AS_SRC   =  ./src/startup_stm32f303retx.s
 C_SRC    =  ./src/main.c
+C_SRC		+=	$(FREERTOS_PORT_C)
+C_SRC   += ./freertos/Source/list.c
+C_SRC   += ./freertos/Source/tasks.c
+C_SRC   += ./freertos/Source/queue.c
 
 INCLUDE  =  -I./
 INCLUDE  += -I./device_headers
+INCLUDE  += -I./freertos/Source/include
+INCLUDE  += -I$(FREERTOS_PORT_I)
 
 OBJS  = $(AS_SRC:.s=.o)
 OBJS += $(C_SRC:.c=.o)

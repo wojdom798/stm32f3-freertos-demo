@@ -17,17 +17,43 @@ void setupHardware(void);
 // Global Variables
 uint32_t core_clock_hz;
 
+// FreeRTOS tasks
+
+/*
+ */
+static void led1_task(void *args) {
+  int delay_ms = *(int*) args;
+  delay_ms = 500;
+  while (1) {
+    LED1_TOGGLE;
+    vTaskDelay(pdMS_TO_TICKS(delay_ms));
+  }
+}
+
+/*
+ */
+static void led2_task(void *args) {
+  int delay_ms = *(int*) args;
+  delay_ms = 2000;
+  while (1) {
+    LED2_TOGGLE;
+    vTaskDelay(pdMS_TO_TICKS(delay_ms));
+  }
+}
+
+
 int main(void) {
 
   setupHardware();
 
+  // Create the LED tasks.
+  xTaskCreate(led1_task, "LED_blink_1", 128, NULL, configMAX_PRIORITIES-1, NULL);
+  xTaskCreate(led2_task, "LED_blink_2", 128, NULL, configMAX_PRIORITIES-1, NULL);
+  // Start the scheduler.
+  vTaskStartScheduler();
 
   while (1) {
 
-    for (uint32_t i = 0; i < 1000000UL; i++) continue;
-    NUCLEO_LED_GPIO->ODR ^= (1 << NUCLEO_LED_PIN);
-    LED1_TOGGLE;
-    LED2_TOGGLE;
   }
 
   return 0;
