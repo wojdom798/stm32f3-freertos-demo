@@ -30,7 +30,7 @@
     #define PORTMACRO_H
 
     #ifdef __cplusplus
-        //extern "C" {
+        extern "C" {
     #endif
 
 /*-----------------------------------------------------------
@@ -238,7 +238,7 @@
     #define portMEMORY_BARRIER()    __asm volatile ( "" ::: "memory" )
 
     #ifdef __cplusplus
-       // }
+        }
     #endif
 
 #endif /* PORTMACRO_H */
